@@ -1,0 +1,1402 @@
+<!DOCTYPE html>
+<html lang="fr" class="bg-slate-50 text-slate-800 font-sans antialiased">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Algorithmique - Pr. Marouane Haddad</title>
+    
+    <!-- Tailwind CSS pour un design premium et moderne -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts: Inter pour le texte, Fira Code pour le code -->
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- FontAwesome pour les icônes -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['Fira Code', 'monospace']
+                    },
+                    colors: {
+                        brand: {
+                            50: '#eff6ff',
+                            100: '#dbeafe',
+                            500: '#3b82f6',
+                            600: '#2563eb',
+                            900: '#1e3a8a',
+                        },
+                        codebg: '#1e1e2e',
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Smooth scrolling et transitions globales */
+        html { scroll-behavior: smooth; }
+        .fade-in { animation: fadeIn 0.4s ease-out forwards; }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Menu de navigation */
+        .nav-link {
+            transition: all 0.2s ease-in-out;
+            border-left: 4px solid transparent;
+        }
+        .nav-link:hover { background-color: #f1f5f9; }
+        .nav-link.active {
+            background-color: #eff6ff;
+            color: #2563eb;
+            font-weight: 600;
+            border-left-color: #2563eb;
+        }
+        .nav-link.td-link { border-left: 4px solid transparent; }
+        .nav-link.td-link.active {
+            background-color: #f0fdf4;
+            color: #16a34a;
+            border-left-color: #16a34a;
+        }
+        .nav-link.td-conv-link.active {
+            background-color: #fdf4ff;
+            color: #c026d3;
+            border-left-color: #c026d3;
+        }
+
+        /* Style des blocs de code VS Code Dark Theme */
+        pre {
+            background-color: #1e1e2e;
+            color: #cdd6f4;
+            padding: 1.5rem;
+            border-radius: 0.75rem;
+            overflow-x: auto;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.95rem;
+            line-height: 1.6;
+            box-shadow: inset 0 2px 4px 0 rgb(0 0 0 / 0.1);
+            margin-top: 1rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        /* Coloration syntaxique manuelle style VS Code */
+        .kw { color: #cba6f7; font-weight: 500; } /* Mots clés : Algorithme, Si, Pour... (Violet) */
+        .typ { color: #f38ba8; } /* Types : Entier, Réel... (Rouge/Rose) */
+        .fn { color: #89b4fa; } /* Fonctions : Ecrire, Lire... (Bleu) */
+        .str { color: #a6e3a1; } /* Chaînes de caractères (Vert) */
+        .com { color: #6c7086; font-style: italic; } /* Commentaires (Gris) */
+        .var { color: #f5e0dc; } /* Variables */
+        .op { color: #89dceb; } /* Opérateurs (Cyan) */
+
+        /* Cartes de contenu */
+        .content-card {
+            background: white;
+            border-radius: 1rem;
+            padding: 2rem;
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.05), 0 2px 4px -2px rgb(0 0 0 / 0.05);
+            margin-bottom: 2rem;
+            border: 1px solid #f1f5f9;
+        }
+
+        .math-block {
+            background-color: #f8fafc;
+            border-left: 3px solid #cbd5e1;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body class="flex flex-col md:flex-row min-h-screen">
+
+    <!-- SIDEBAR GAUCHE -->
+    <aside class="w-full md:w-80 bg-white border-r border-slate-200 shadow-sm md:fixed h-screen flex flex-col z-50">
+        <!-- Profil Professeur -->
+        <div class="p-8 border-b border-slate-100 flex flex-col items-center text-center bg-gradient-to-b from-brand-50 to-white">
+            <div class="relative">
+                <img src="https://lh3.googleusercontent.com/pw/AP1GczPEvAG9wQgYBtmNdhNz5Z80VOmZoazIm1ICMWg9uBXkHMzmIdekHNWZmc2yxmHl1nhknfYYfNFCBLVsxqP1b4Uqe0ayEQmgtvVRgGvPCNXvoa2Smic1a40mB6QXLSlGcUiCIl6SXM-VEsnUzHU3NbM=w683-h911-s-no-gm?authuser=0" 
+                     alt="Pr. Marouane Haddad" 
+                     class="w-28 h-28 rounded-full border-4 border-white shadow-lg object-contain">
+                <div class="absolute bottom-1 right-1 bg-green-500 w-4 h-4 rounded-full border-2 border-white"></div>
+            </div>
+            <h2 class="font-bold text-slate-900 text-xl mt-4">Pr. Marouane Haddad</h2>
+            <p class="text-xs text-brand-600 font-semibold tracking-wider mt-1 uppercase bg-brand-100 px-3 py-1 rounded-full"> Algorithmique & Progr. </p>
+        </div>
+
+        <!-- Menu de Navigation -->
+        <nav class="flex-1 overflow-y-auto py-6 flex flex-col gap-1 px-3">
+            <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider ml-4 mb-2">Cours Magistral</h3>
+            
+            <a onclick="showSection('sec-bases')" id="nav-sec-bases" class="nav-link active flex items-center gap-3 px-4 py-3 rounded-r-lg text-slate-600 cursor-pointer">
+                <i class="fa-solid fa-microchip w-5 text-center"></i> 0. Bases & Conversions
+            </a>
+            <a onclick="showSection('sec1')" id="nav-sec1" class="nav-link flex items-center gap-3 px-4 py-3 rounded-r-lg text-slate-600 cursor-pointer">
+                <i class="fa-solid fa-play w-5 text-center"></i> 1. Introduction Algo
+            </a>
+            <a onclick="showSection('sec2')" id="nav-sec2" class="nav-link flex items-center gap-3 px-4 py-3 rounded-r-lg text-slate-600 cursor-pointer">
+                <i class="fa-solid fa-cube w-5 text-center"></i> 2. Structure & Variables
+            </a>
+            <a onclick="showSection('sec3')" id="nav-sec3" class="nav-link flex items-center gap-3 px-4 py-3 rounded-r-lg text-slate-600 cursor-pointer">
+                <i class="fa-solid fa-calculator w-5 text-center"></i> 3. Opérateurs
+            </a>
+            <a onclick="showSection('sec4')" id="nav-sec4" class="nav-link flex items-center gap-3 px-4 py-3 rounded-r-lg text-slate-600 cursor-pointer">
+                <i class="fa-solid fa-code-branch w-5 text-center"></i> 4. Conditions
+            </a>
+            <a onclick="showSection('sec5')" id="nav-sec5" class="nav-link flex items-center gap-3 px-4 py-3 rounded-r-lg text-slate-600 cursor-pointer">
+                <i class="fa-solid fa-rotate w-5 text-center"></i> 5. Les Boucles
+            </a>
+            <a onclick="showSection('sec6')" id="nav-sec6" class="nav-link flex items-center gap-3 px-4 py-3 rounded-r-lg text-slate-600 cursor-pointer">
+                <i class="fa-solid fa-puzzle-piece w-5 text-center"></i> 6. Sous-programmes
+            </a>
+
+            <!-- Séparateur TD -->
+            <div class="mt-6 mb-2 border-t border-slate-100 pt-6"></div>
+            <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider ml-4 mb-2">Travaux Dirigés</h3>
+            
+            <a onclick="showSection('td-conv')" id="nav-td-conv" class="nav-link td-conv-link flex items-center gap-3 px-4 py-3 rounded-lg text-slate-700 bg-slate-50 hover:bg-fuchsia-50 hover:text-fuchsia-700 cursor-pointer transition-all border border-slate-200 mb-2">
+                <i class="fa-solid fa-laptop-code w-5 text-center text-xl text-fuchsia-600"></i> 
+                <span class="font-bold">TD - Conversions</span>
+            </a>
+
+            <a onclick="showSection('td')" id="nav-td" class="nav-link td-link flex items-center gap-3 px-4 py-3 rounded-lg text-slate-700 bg-slate-50 hover:bg-green-50 hover:text-green-700 cursor-pointer transition-all border border-slate-200">
+                <i class="fa-solid fa-graduation-cap w-5 text-center text-xl text-green-600"></i> 
+                <span class="font-bold">TD - Algorithmique</span>
+            </a>
+        </nav>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <main class="flex-1 min-w-0 md:ml-80 p-6 md:p-12 lg:px-16 lg:py-12 w-full">
+        
+        <!-- ========================================== -->
+        <!-- SECTION 0: BASES NUMERIQUES ET CONVERSIONS -->
+        <!-- ========================================== -->
+        <section id="sec-bases" class="section-content block fade-in">
+            <header class="mb-10">
+                <h1 class="text-4xl font-extrabold text-slate-900 tracking-tight">0. Bases Numériques & Conversions</h1>
+                <p class="text-lg text-slate-500 mt-3">Comprendre comment la machine représente l'information en mémoire.</p>
+            </header>
+
+            <div class="content-card border-l-4 border-brand-500">
+                <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center gap-2">
+                    <i class="fa-solid fa-server text-brand-500"></i> Les systèmes de numération
+                </h3>
+                <p class="text-slate-600 leading-relaxed mb-4">
+                    L'ordinateur ne comprend que deux états : le courant passe (1) ou ne passe pas (0). C'est le système <strong>Binaire (Base 2)</strong>.
+                    Pour faciliter la lecture des longues chaînes de bits, les informaticiens utilisent des bases dérivées : 
+                    l'<strong>Octal (Base 8)</strong> et l'<strong>Hexadécimal (Base 16)</strong>.
+                </p>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mt-6">
+                    <div class="bg-blue-50 p-4 rounded-lg border border-blue-100">
+                        <h4 class="font-bold text-blue-800">Binaire (Base 2)</h4>
+                        <p class="text-sm text-blue-600 mt-1">Symboles : 0, 1</p>
+                    </div>
+                    <div class="bg-emerald-50 p-4 rounded-lg border border-emerald-100">
+                        <h4 class="font-bold text-emerald-800">Octal (Base 8)</h4>
+                        <p class="text-sm text-emerald-600 mt-1">Symboles : 0 à 7</p>
+                    </div>
+                    <div class="bg-slate-100 p-4 rounded-lg border border-slate-200">
+                        <h4 class="font-bold text-slate-800">Décimal (Base 10)</h4>
+                        <p class="text-sm text-slate-600 mt-1">Symboles : 0 à 9 (Humain)</p>
+                    </div>
+                    <div class="bg-purple-50 p-4 rounded-lg border border-purple-100">
+                        <h4 class="font-bold text-purple-800">Hexa (Base 16)</h4>
+                        <p class="text-sm text-purple-600 mt-1">0-9 puis A, B, C, D, E, F</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="content-card">
+                <h3 class="text-xl font-bold text-slate-800 mb-4">Méthodes de conversion universelles</h3>
+                <ul class="space-y-4 text-slate-700">
+                    <li class="flex items-start gap-3">
+                        <div class="bg-slate-100 text-slate-600 p-2 rounded shrink-0"><i class="fa-solid fa-arrow-right-to-bracket"></i></div>
+                        <div>
+                            <strong>Vers le Décimal (Polynômes) :</strong> On multiplie chaque chiffre par la base élevée à la puissance de son rang (en partant de 0 à droite).<br>
+                            <span class="text-sm text-slate-500 font-mono">Ex: 101₂ = 1×2² + 0×2¹ + 1×2⁰ = 4 + 0 + 1 = 5₁₀</span>
+                        </div>
+                    </li>
+                    <li class="flex items-start gap-3">
+                        <div class="bg-slate-100 text-slate-600 p-2 rounded shrink-0"><i class="fa-solid fa-divide"></i></div>
+                        <div>
+                            <strong>Depuis le Décimal (Divisions) :</strong> On divise le nombre par la base cible (2, 8 ou 16). On note les restes. On lit les restes de bas en haut.
+                        </div>
+                    </li>
+                    <li class="flex items-start gap-3">
+                        <div class="bg-slate-100 text-slate-600 p-2 rounded shrink-0"><i class="fa-solid fa-object-group"></i></div>
+                        <div>
+                            <strong>Binaire ↔ Octal/Hexa (Regroupements) :</strong><br>
+                            - Pour l'Octal : On groupe les bits par paquets de <strong>3</strong>.<br>
+                            - Pour l'Hexadécimal : On groupe les bits par paquets de <strong>4</strong>.
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- ========================================== -->
+        <!-- SECTION 1: Introduction -->
+        <!-- ========================================== -->
+        <section id="sec1" class="section-content hidden fade-in">
+            <!-- (Contenu existant sec1) -->
+            <header class="mb-10">
+                <h1 class="text-4xl font-extrabold text-slate-900 tracking-tight">1. Introduction à l'Algorithmique</h1>
+                <p class="text-lg text-slate-500 mt-3">Comprendre comment "pense" un ordinateur avant de coder.</p>
+            </header>
+
+            <div class="content-card">
+                <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center gap-2">
+                    <i class="fa-solid fa-lightbulb text-yellow-500"></i> Qu'est-ce qu'un Algorithme ?
+                </h3>
+                <p class="text-slate-600 leading-relaxed mb-6">
+                    Un algorithme est une suite finie et ordonnée d'instructions claires permettant de résoudre un problème. 
+                    Il s'écrit en <strong>pseudo-code</strong>, un langage universel indépendant de tout langage de programmation (comme le C ou Java).
+                </p>
+
+                <div class="bg-brand-50 rounded-xl p-6 border border-brand-100 flex flex-col md:flex-row items-center justify-between gap-6 text-center">
+                    <div class="flex-1">
+                        <div class="w-12 h-12 bg-white rounded-full flex items-center justify-center mx-auto mb-3 shadow text-brand-600 text-xl"><i class="fa-solid fa-sign-in-alt"></i></div>
+                        <h4 class="font-bold text-brand-900">Entrées</h4>
+                        <p class="text-sm text-brand-600 mt-1">Données fournies (Ex: Rayon)</p>
+                    </div>
+                    <i class="fa-solid fa-arrow-right text-brand-300 text-2xl hidden md:block"></i>
+                    <div class="flex-1">
+                        <div class="w-12 h-12 bg-white rounded-full flex items-center justify-center mx-auto mb-3 shadow text-brand-600 text-xl"><i class="fa-solid fa-microchip"></i></div>
+                        <h4 class="font-bold text-brand-900">Traitement</h4>
+                        <p class="text-sm text-brand-600 mt-1">Calculs (Ex: R * R * 3.14)</p>
+                    </div>
+                    <i class="fa-solid fa-arrow-right text-brand-300 text-2xl hidden md:block"></i>
+                    <div class="flex-1">
+                        <div class="w-12 h-12 bg-white rounded-full flex items-center justify-center mx-auto mb-3 shadow text-brand-600 text-xl"><i class="fa-solid fa-sign-out-alt"></i></div>
+                        <h4 class="font-bold text-brand-900">Sorties</h4>
+                        <p class="text-sm text-brand-600 mt-1">Résultat (Ex: Afficher Volume)</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ========================================== -->
+        <!-- SECTION 2: Structure & Variables -->
+        <!-- ========================================== -->
+        <section id="sec2" class="section-content hidden fade-in">
+            <header class="mb-10">
+                <h1 class="text-4xl font-extrabold text-slate-900 tracking-tight">2. Structure & Variables</h1>
+                <p class="text-lg text-slate-500 mt-3">L'anatomie parfaite d'un algorithme et la gestion de la mémoire.</p>
+            </header>
+
+            <div class="content-card">
+                <h3 class="text-xl font-bold text-slate-800 mb-4">Structure générale</h3>
+                <p class="text-slate-600 mb-2">Tout algorithme est divisé en 3 parties obligatoires : l'en-tête, les déclarations, et le corps principal.</p>
+<pre><code><span class="kw">Algorithme</span> <span class="var">NomDeMonAlgorithme</span>
+<span class="com">// 1. En-tête : Nom représentatif du programme</span>
+
+<span class="kw">Variables</span>
+<span class="com">// 2. Déclarations : Liste de toutes les "boîtes" mémoire utilisées</span>
+    <span class="var">age</span> : <span class="typ">Entier</span>
+    <span class="var">nom</span> : <span class="typ">Chaîne</span>
+
+<span class="kw">Début</span>
+<span class="com">// 3. Corps : Les instructions exécutées de haut en bas</span>
+    <span class="fn">Ecrire</span>(<span class="str">"Bonjour !"</span>)
+<span class="kw">Fin</span></code></pre>
+            </div>
+
+            <div class="content-card mt-6">
+                <h3 class="text-xl font-bold text-slate-800 mb-4">Les Types de Base</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div class="bg-slate-50 p-4 rounded-lg border border-slate-200">
+                        <span class="typ font-bold font-mono">Entier</span>
+                        <p class="text-sm text-slate-600 mt-1">Nombres sans virgule (ex: 5, -10).</p>
+                    </div>
+                    <div class="bg-slate-50 p-4 rounded-lg border border-slate-200">
+                        <span class="typ font-bold font-mono">Réel</span>
+                        <p class="text-sm text-slate-600 mt-1">Nombres à virgule (ex: 3.14, 0.5).</p>
+                    </div>
+                    <div class="bg-slate-50 p-4 rounded-lg border border-slate-200">
+                        <span class="typ font-bold font-mono">Caractère</span>
+                        <p class="text-sm text-slate-600 mt-1">Une seule lettre/symbole (ex: 'A', '?').</p>
+                    </div>
+                    <div class="bg-slate-50 p-4 rounded-lg border border-slate-200">
+                        <span class="typ font-bold font-mono">Chaîne</span>
+                        <p class="text-sm text-slate-600 mt-1">Du texte (ex: "Bonjour S1").</p>
+                    </div>
+                    <div class="bg-slate-50 p-4 rounded-lg border border-slate-200 md:col-span-2">
+                        <span class="typ font-bold font-mono">Booléen</span>
+                        <p class="text-sm text-slate-600 mt-1">Seulement deux valeurs : Vrai ou Faux.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ========================================== -->
+        <!-- SECTION 3: Opérateurs -->
+        <!-- ========================================== -->
+        <section id="sec3" class="section-content hidden fade-in">
+            <header class="mb-10">
+                <h1 class="text-4xl font-extrabold text-slate-900 tracking-tight">3. L'Affectation & Les Opérateurs</h1>
+                <p class="text-lg text-slate-500 mt-3">Manipuler les données dans nos variables.</p>
+            </header>
+
+            <div class="content-card">
+                <h3 class="text-xl font-bold text-slate-800 mb-4">L'Affectation <span class="text-brand-600 font-mono">&lt;-</span></h3>
+                <p class="text-slate-600 mb-4">L'affectation permet de ranger une valeur dans une variable. <strong>On évalue toujours ce qui est à droite de la flèche, et on le range à gauche.</strong></p>
+<pre><code><span class="var">A</span> <span class="op">&lt;-</span> 5           <span class="com">// A vaut 5</span>
+<span class="var">B</span> <span class="op">&lt;-</span> <span class="var">A</span> <span class="op">+</span> 2       <span class="com">// B vaut 7</span>
+<span class="var">A</span> <span class="op">&lt;-</span> <span class="var">A</span> <span class="op">+</span> 1       <span class="com">// Incrémentation : A devient 6</span></code></pre>
+            </div>
+
+            <div class="content-card mt-6">
+                <h3 class="text-xl font-bold text-slate-800 mb-4">Les Opérateurs usuels</h3>
+                <ul class="space-y-4 text-slate-700">
+                    <li class="flex items-start gap-3">
+                        <div class="bg-blue-100 text-brand-600 p-2 rounded shrink-0"><i class="fa-solid fa-plus-minus"></i></div>
+                        <div>
+                            <strong>Arithmétiques :</strong> <code class="bg-slate-100 px-1 rounded text-sm text-slate-800">+</code>, <code class="bg-slate-100 px-1 rounded text-sm text-slate-800">-</code>, <code class="bg-slate-100 px-1 rounded text-sm text-slate-800">*</code>, <code class="bg-slate-100 px-1 rounded text-sm text-slate-800">/</code>, 
+                            <code class="bg-slate-100 px-1 rounded text-sm text-slate-800">DIV</code> (division entière), <code class="bg-slate-100 px-1 rounded text-sm text-slate-800">MOD</code> (reste de la division).
+                        </div>
+                    </li>
+                    <li class="flex items-start gap-3">
+                        <div class="bg-green-100 text-green-600 p-2 rounded shrink-0"><i class="fa-solid fa-equals"></i></div>
+                        <div>
+                            <strong>Comparaison :</strong> <code class="bg-slate-100 px-1 rounded text-sm text-slate-800">=</code> (égalité), <code class="bg-slate-100 px-1 rounded text-sm text-slate-800">&lt;&gt;</code> (différent), <code class="bg-slate-100 px-1 rounded text-sm text-slate-800">&lt;</code>, <code class="bg-slate-100 px-1 rounded text-sm text-slate-800">&gt;</code>, <code class="bg-slate-100 px-1 rounded text-sm text-slate-800">&lt;=</code>, <code class="bg-slate-100 px-1 rounded text-sm text-slate-800">&gt;=</code>.
+                        </div>
+                    </li>
+                    <li class="flex items-start gap-3">
+                        <div class="bg-purple-100 text-purple-600 p-2 rounded shrink-0"><i class="fa-solid fa-code-merge"></i></div>
+                        <div>
+                            <strong>Logiques :</strong> <code class="bg-slate-100 px-1 rounded text-sm text-slate-800">ET</code>, <code class="bg-slate-100 px-1 rounded text-sm text-slate-800">OU</code>, <code class="bg-slate-100 px-1 rounded text-sm text-slate-800">NON</code>.
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- ========================================== -->
+        <!-- SECTION 4: Conditions -->
+        <!-- ========================================== -->
+        <section id="sec4" class="section-content hidden fade-in">
+            <header class="mb-10">
+                <h1 class="text-4xl font-extrabold text-slate-900 tracking-tight">4. Les Conditions</h1>
+                <p class="text-lg text-slate-500 mt-3">Prendre des décisions dans notre algorithme.</p>
+            </header>
+
+            <div class="content-card">
+                <h3 class="text-xl font-bold text-slate-800 mb-4">L'alternative : Si ... Alors ... Sinon</h3>
+                <p class="text-slate-600 mb-2">Exécute un bloc si la condition est vraie, sinon exécute un autre bloc.</p>
+<pre><code><span class="kw">Si</span> (<span class="var">note</span> <span class="op">&gt;=</span> 10) <span class="kw">Alors</span>
+    <span class="fn">Ecrire</span>(<span class="str">"Vous avez validé le module."</span>)
+<span class="kw">Sinon</span>
+    <span class="fn">Ecrire</span>(<span class="str">"Vous êtes en rattrapage."</span>)
+<span class="kw">FinSi</span></code></pre>
+            </div>
+
+            <div class="content-card mt-6">
+                <h3 class="text-xl font-bold text-slate-800 mb-4">Le choix multiple : Selon</h3>
+                <p class="text-slate-600 mb-2">Très utile pour remplacer de nombreux "Si" imbriqués quand on teste l'égalité d'une même variable.</p>
+<pre><code><span class="kw">Selon</span> (<span class="var">choix_menu</span>) <span class="kw">Faire</span>
+    1 : <span class="fn">Ecrire</span>(<span class="str">"Nouvelle partie"</span>)
+    2 : <span class="fn">Ecrire</span>(<span class="str">"Options"</span>)
+    3 : <span class="fn">Ecrire</span>(<span class="str">"Quitter"</span>)
+    <span class="kw">Sinon</span> : <span class="fn">Ecrire</span>(<span class="str">"Choix invalide"</span>)
+<span class="kw">FinSelon</span></code></pre>
+            </div>
+        </section>
+
+        <!-- ========================================== -->
+        <!-- SECTION 5: Les Boucles avec Simulateur Interactif -->
+        <!-- ========================================== -->
+        <section id="sec5" class="section-content hidden fade-in">
+            <header class="mb-10">
+                <h1 class="text-4xl font-extrabold text-slate-900 tracking-tight">5. Les Boucles (Itérations)</h1>
+                <p class="text-lg text-slate-500 mt-3">Répéter des instructions de manière intelligente.</p>
+            </header>
+
+            <div class="content-card border-brand-200">
+                <h3 class="text-xl font-bold text-brand-900 mb-2 flex items-center gap-2">
+                    <i class="fa-solid fa-chalkboard-user text-brand-600"></i> Interactif : Le Tableau de Trace
+                </h3>
+                <p class="text-slate-600 mb-4 text-sm">Le tableau de trace (ou exécution à la main) est crucial pour comprendre l'évolution des variables en mémoire étape par étape.</p>
+                
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 bg-slate-50 p-4 rounded-xl border border-slate-200">
+                    <!-- Algorithme source -->
+                    <div>
+                        <h4 class="font-bold text-slate-700 mb-2 text-sm uppercase tracking-wide">Algorithme à analyser</h4>
+<pre class="!mt-0 !mb-0 !text-sm"><code><span class="var">somme</span> <span class="op">&lt;-</span> 0
+<span class="kw">Pour</span> <span class="var">i</span> <span class="kw">De</span> 1 <span class="kw">A</span> 3 <span class="kw">Faire</span>
+    <span class="var">somme</span> <span class="op">&lt;-</span> <span class="var">somme</span> <span class="op">+</span> <span class="var">i</span>
+<span class="kw">FinPour</span>
+<span class="fn">Ecrire</span>(<span class="str">"Résultat :"</span>, <span class="var">somme</span>)</code></pre>
+                        <div class="mt-4 flex gap-2">
+                            <button onclick="nextTraceStep()" class="bg-brand-600 text-white px-4 py-2 rounded shadow hover:bg-brand-700 transition font-medium text-sm">
+                                Étape Suivante <i class="fa-solid fa-forward-step ml-1"></i>
+                            </button>
+                            <button onclick="resetTrace()" class="bg-white border border-slate-300 text-slate-700 px-4 py-2 rounded shadow-sm hover:bg-slate-50 transition font-medium text-sm">
+                                Réinitialiser
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- Tableau visuel -->
+                    <div>
+                        <h4 class="font-bold text-slate-700 mb-2 text-sm uppercase tracking-wide">Mémoire (RAM)</h4>
+                        <div class="overflow-x-auto rounded-lg border border-slate-200">
+                            <table class="w-full text-sm text-left text-slate-700 bg-white">
+                                <thead class="bg-slate-100 text-slate-800">
+                                    <tr>
+                                        <th class="px-4 py-2">Étape</th>
+                                        <th class="px-4 py-2 font-mono text-brand-600">i</th>
+                                        <th class="px-4 py-2 font-mono text-brand-600">somme</th>
+                                        <th class="px-4 py-2">Action de la machine</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="trace-tbody">
+                                    <!-- Rows added by JS -->
+                                </tbody>
+                            </table>
+                        </div>
+                        <div id="trace-message" class="mt-3 text-sm font-semibold text-green-600 hidden">
+                            <i class="fa-solid fa-check-circle"></i> Fin de la boucle. La somme vaut 6.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="content-card mt-6">
+                <h3 class="text-xl font-bold text-slate-800 mb-4">Les 3 types de boucles</h3>
+                <div class="space-y-6">
+                    <div>
+                        <h4 class="font-bold text-slate-800">1. Pour (For)</h4>
+                        <p class="text-sm text-slate-600 mb-1">On connaît le nombre d'itérations à l'avance.</p>
+                        <pre class="!mt-1 !mb-0 !p-3"><code><span class="kw">Pour</span> <span class="var">i</span> <span class="kw">De</span> 1 <span class="kw">A</span> 10 <span class="kw">Faire</span> ... <span class="kw">FinPour</span></code></pre>
+                    </div>
+                    <div>
+                        <h4 class="font-bold text-slate-800">2. Tant Que (While)</h4>
+                        <p class="text-sm text-slate-600 mb-1">On teste la condition <strong>avant</strong> d'entrer. Peut ne jamais s'exécuter.</p>
+                        <pre class="!mt-1 !mb-0 !p-3"><code><span class="kw">Tant Que</span> (<span class="var">condition</span>) <span class="kw">Faire</span> ... <span class="kw">FinTantQue</span></code></pre>
+                    </div>
+                    <div>
+                        <h4 class="font-bold text-slate-800">3. Répéter ... Jusqu'à (Do While)</h4>
+                        <p class="text-sm text-slate-600 mb-1">On exécute <strong>au moins une fois</strong>, on teste la condition à la fin (idéal pour la saisie).</p>
+                        <pre class="!mt-1 !mb-0 !p-3"><code><span class="kw">Répéter</span> ... <span class="kw">Jusqu'a</span> (<span class="var">condition vraie</span>)</code></pre>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ========================================== -->
+        <!-- SECTION 6: Sous-programmes -->
+        <!-- ========================================== -->
+        <section id="sec6" class="section-content hidden fade-in">
+            <header class="mb-10">
+                <h1 class="text-4xl font-extrabold text-slate-900 tracking-tight">6. Les Sous-programmes</h1>
+                <p class="text-lg text-slate-500 mt-3">Diviser pour régner : Fonctions et Procédures.</p>
+            </header>
+
+            <div class="content-card">
+                <h3 class="text-xl font-bold text-slate-800 mb-4">La Fonction</h3>
+                <p class="text-slate-600 mb-2">Elle reçoit des paramètres, effectue un calcul, et <strong>retourne obligatoirement une valeur</strong>. On l'utilise toujours à la droite d'une affectation ou dans un calcul.</p>
+<pre><code><span class="kw">Fonction</span> <span class="fn">Carre</span>(<span class="var">x</span> : <span class="typ">Entier</span>) : <span class="typ">Entier</span>
+<span class="kw">Début</span>
+    <span class="kw">Retourner</span> (<span class="var">x</span> <span class="op">*</span> <span class="var">x</span>)
+<span class="kw">FinFonction</span>
+
+<span class="com">// Utilisation dans le programme principal :</span>
+<span class="var">Resultat</span> <span class="op">&lt;-</span> <span class="fn">Carre</span>(5)</code></pre>
+            </div>
+
+            <div class="content-card mt-6">
+                <h3 class="text-xl font-bold text-slate-800 mb-4">La Procédure</h3>
+                <p class="text-slate-600 mb-2">Elle effectue une action (comme un affichage) mais <strong>ne retourne aucune valeur</strong>. Elle s'appelle comme une instruction autonome.</p>
+<pre><code><span class="kw">Procédure</span> <span class="fn">AfficherTitre</span>()
+<span class="kw">Début</span>
+    <span class="fn">Ecrire</span>(<span class="str">"*** MENU PRINCIPAL ***"</span>)
+<span class="kw">FinProcédure</span>
+
+<span class="com">// Utilisation :</span>
+<span class="fn">AfficherTitre</span>()</code></pre>
+            </div>
+        </section>
+
+        <!-- ========================================== -->
+        <!-- SECTION TD CONVERSIONS (Nouveau) -->
+        <!-- ========================================== -->
+        <section id="td-conv" class="section-content hidden fade-in">
+            <header class="mb-10 border-b border-slate-200 pb-6">
+                <div class="flex items-center gap-4 mb-2">
+                    <div class="bg-fuchsia-100 text-fuchsia-600 p-3 rounded-xl text-2xl"><i class="fa-solid fa-laptop-code"></i></div>
+                    <h1 class="text-4xl font-extrabold text-slate-900 tracking-tight">TD - Conversions de Bases</h1>
+                </div>
+                <p class="text-lg text-slate-500 mt-2">Maîtrisez les passages entre Binaire, Décimal, Octal et Hexadécimal.</p>
+            </header>
+
+            <!-- Conv Ex 1 -->
+            <div class="content-card relative border-l-4 border-l-fuchsia-500">
+                <div class="absolute top-4 right-6 text-slate-200 text-4xl font-extrabold opacity-50">#1</div>
+                <span class="inline-block text-xs font-semibold px-2.5 py-1 rounded-full mb-2 bg-slate-100 text-slate-600">Base 2 vers 10</span>
+                <h3 class="text-xl font-bold text-slate-800 mb-2">Binaire vers Décimal</h3>
+                <p class="text-slate-600 mb-6 bg-slate-50 p-4 rounded-lg border border-slate-100">
+                    <strong>Énoncé :</strong> Convertissez les nombres binaires suivants en valeurs décimales en détaillant le calcul :<br>
+                    a) 101₂ <br>
+                    b) 1010₂ <br>
+                    c) 11011₂
+                </p>
+                <button onclick="toggleTD('sol-conv1', this)" class="bg-slate-800 hover:bg-slate-900 text-white font-medium py-2 px-4 rounded transition-colors text-sm flex items-center gap-2">
+                    <i class="fa-solid fa-eye"></i> Afficher la Solution
+                </button>
+                <div id="sol-conv1" class="hidden mt-4">
+                    <div class="math-block">
+                        <strong>a) 101₂</strong><br>
+                        = 1×2² + 0×2¹ + 1×2⁰ <br>
+                        = 4 + 0 + 1 = <strong>5₁₀</strong>
+                        <br><br>
+                        <strong>b) 1010₂</strong><br>
+                        = 1×2³ + 0×2² + 1×2¹ + 0×2⁰<br>
+                        = 8 + 0 + 2 + 0 = <strong>10₁₀</strong>
+                        <br><br>
+                        <strong>c) 11011₂</strong><br>
+                        = 1×2⁴ + 1×2³ + 0×2² + 1×2¹ + 1×2⁰<br>
+                        = 16 + 8 + 0 + 2 + 1 = <strong>27₁₀</strong>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Conv Ex 2 -->
+            <div class="content-card relative border-l-4 border-l-fuchsia-500 mt-6">
+                <div class="absolute top-4 right-6 text-slate-200 text-4xl font-extrabold opacity-50">#2</div>
+                <span class="inline-block text-xs font-semibold px-2.5 py-1 rounded-full mb-2 bg-slate-100 text-slate-600">Base 10 vers 2</span>
+                <h3 class="text-xl font-bold text-slate-800 mb-2">Décimal vers Binaire</h3>
+                <p class="text-slate-600 mb-6 bg-slate-50 p-4 rounded-lg border border-slate-100">
+                    <strong>Énoncé :</strong> Convertissez les nombres décimaux suivants en binaire (divisions successives) :<br>
+                    a) 14₁₀ <br>
+                    b) 37₁₀ <br>
+                    c) 156₁₀
+                </p>
+                <button onclick="toggleTD('sol-conv2', this)" class="bg-slate-800 hover:bg-slate-900 text-white font-medium py-2 px-4 rounded transition-colors text-sm flex items-center gap-2">
+                    <i class="fa-solid fa-eye"></i> Afficher la Solution
+                </button>
+                <div id="sol-conv2" class="hidden mt-4">
+                    <div class="math-block">
+                        <strong>a) 14₁₀</strong><br>
+                        14 ÷ 2 = 7 (Reste 0)<br>
+                        7 ÷ 2 = 3 (Reste 1)<br>
+                        3 ÷ 2 = 1 (Reste 1)<br>
+                        1 ÷ 2 = 0 (Reste 1)<br>
+                        Lecture de bas en haut : <strong>1110₂</strong>
+                        <br><br>
+                        <strong>b) 37₁₀</strong><br>
+                        37 ÷ 2 = 18 (R=1)<br>
+                        18 ÷ 2 = 9 (R=0)<br>
+                        9 ÷ 2 = 4 (R=1)<br>
+                        4 ÷ 2 = 2 (R=0)<br>
+                        2 ÷ 2 = 1 (R=0)<br>
+                        1 ÷ 2 = 0 (R=1)<br>
+                        Lecture : <strong>100101₂</strong>
+                        <br><br>
+                        <strong>c) 156₁₀</strong><br>
+                        Résultat final après divisions : <strong>10011100₂</strong>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Conv Ex 3 -->
+            <div class="content-card relative border-l-4 border-l-fuchsia-500 mt-6">
+                <div class="absolute top-4 right-6 text-slate-200 text-4xl font-extrabold opacity-50">#3</div>
+                <span class="inline-block text-xs font-semibold px-2.5 py-1 rounded-full mb-2 bg-purple-100 text-purple-700">Base 16</span>
+                <h3 class="text-xl font-bold text-slate-800 mb-2">Le système Hexadécimal</h3>
+                <p class="text-slate-600 mb-6 bg-slate-50 p-4 rounded-lg border border-slate-100">
+                    <strong>Énoncé :</strong> Effectuez les conversions suivantes :<br>
+                    a) 1011010110₂ ➔ Hexadécimal<br>
+                    b) 4B₁₆ ➔ Binaire<br>
+                    c) 400₁₀ ➔ Hexadécimal
+                </p>
+                <button onclick="toggleTD('sol-conv3', this)" class="bg-slate-800 hover:bg-slate-900 text-white font-medium py-2 px-4 rounded transition-colors text-sm flex items-center gap-2">
+                    <i class="fa-solid fa-eye"></i> Afficher la Solution
+                </button>
+                <div id="sol-conv3" class="hidden mt-4">
+                    <div class="math-block">
+                        <strong>a) Binaire vers Hexa (paquets de 4) :</strong><br>
+                        Séparation : 10 | 1101 | 0110<br>
+                        Complétion : 0010 | 1101 | 0110<br>
+                        Évaluation : 2 | 13(D) | 6 ➔ <strong>2D6₁₆</strong>
+                        <br><br>
+                        <strong>b) Hexa vers Binaire :</strong><br>
+                        4 = 0100<br>
+                        B (11) = 1011<br>
+                        Concaténation ➔ <strong>01001011₂</strong>
+                        <br><br>
+                        <strong>c) Décimal vers Hexa (divisions par 16) :</strong><br>
+                        400 ÷ 16 = 25 (Reste 0)<br>
+                        25 ÷ 16 = 1 (Reste 9)<br>
+                        1 ÷ 16 = 0 (Reste 1)<br>
+                        Lecture : <strong>190₁₆</strong>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Conv Ex 4 -->
+            <div class="content-card relative border-l-4 border-l-fuchsia-500 mt-6">
+                <div class="absolute top-4 right-6 text-slate-200 text-4xl font-extrabold opacity-50">#4</div>
+                <span class="inline-block text-xs font-semibold px-2.5 py-1 rounded-full mb-2 bg-emerald-100 text-emerald-700">Base 8</span>
+                <h3 class="text-xl font-bold text-slate-800 mb-2">Le système Octal</h3>
+                <p class="text-slate-600 mb-6 bg-slate-50 p-4 rounded-lg border border-slate-100">
+                    <strong>Énoncé :</strong> Convertissez les valeurs suivantes vers ou depuis la base 8 :<br>
+                    a) 11010110₂ ➔ Octal<br>
+                    b) 572₈ ➔ Binaire
+                </p>
+                <button onclick="toggleTD('sol-conv4', this)" class="bg-slate-800 hover:bg-slate-900 text-white font-medium py-2 px-4 rounded transition-colors text-sm flex items-center gap-2">
+                    <i class="fa-solid fa-eye"></i> Afficher la Solution
+                </button>
+                <div id="sol-conv4" class="hidden mt-4">
+                    <div class="math-block">
+                        <strong>a) Binaire vers Octal (paquets de 3) :</strong><br>
+                        Séparation : 11 | 010 | 110<br>
+                        Complétion : 011 | 010 | 110<br>
+                        Évaluation : 3 | 2 | 6 ➔ <strong>326₈</strong>
+                        <br><br>
+                        <strong>b) Octal vers Binaire :</strong><br>
+                        5 = 101<br>
+                        7 = 111<br>
+                        2 = 010<br>
+                        Concaténation ➔ <strong>101111010₂</strong>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Conv Ex 5 -->
+            <div class="content-card relative border-l-4 border-l-fuchsia-500 mt-6">
+                <div class="absolute top-4 right-6 text-slate-200 text-4xl font-extrabold opacity-50">#5</div>
+                <span class="inline-block text-xs font-semibold px-2.5 py-1 rounded-full mb-2 bg-blue-100 text-blue-700">Opérations</span>
+                <h3 class="text-xl font-bold text-slate-800 mb-2">Arithmétique Binaire</h3>
+                <p class="text-slate-600 mb-6 bg-slate-50 p-4 rounded-lg border border-slate-100">
+                    <strong>Énoncé :</strong> Posez et calculez en binaire :<br>
+                    a) 1010₂ + 0111₂<br>
+                    b) 1100₂ - 0101₂
+                </p>
+                <button onclick="toggleTD('sol-conv5', this)" class="bg-slate-800 hover:bg-slate-900 text-white font-medium py-2 px-4 rounded transition-colors text-sm flex items-center gap-2">
+                    <i class="fa-solid fa-eye"></i> Afficher la Solution
+                </button>
+                <div id="sol-conv5" class="hidden mt-4">
+                    <div class="math-block">
+                        <strong>a) Addition (10 + 7) :</strong><br>
+                        &nbsp;&nbsp;1 0 1 0<br>
+                        + 0 1 1 1<br>
+                        ---------<br>
+                        1 0 0 0 1 ➔ <strong>10001₂</strong> (17₁₀)<br>
+                        <em>(Note: 1+1=0 retenue 1, 1+1+1=1 retenue 1)</em>
+                        <br><br>
+                        <strong>b) Soustraction (12 - 5) :</strong><br>
+                        &nbsp;&nbsp;1 1 0 0<br>
+                        - 0 1 0 1<br>
+                        ---------<br>
+                        0 1 1 1 ➔ <strong>0111₂</strong> (7₁₀)<br>
+                        <em>(Note: 0-1 = 1 avec retenue/emprunt de 1 sur la colonne de gauche)</em>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ========================================== -->
+        <!-- SECTION TD (Travaux Dirigés Algo)          -->
+        <!-- ========================================== -->
+        <section id="td" class="section-content hidden fade-in">
+            <header class="mb-10 border-b border-slate-200 pb-6">
+                <div class="flex items-center gap-4 mb-2">
+                    <div class="bg-green-100 text-green-600 p-3 rounded-xl text-2xl"><i class="fa-solid fa-graduation-cap"></i></div>
+                    <h1 class="text-4xl font-extrabold text-slate-900 tracking-tight">TD - Algorithmique</h1>
+                </div>
+                <p class="text-lg text-slate-500 mt-2">Pratiquez avec ces exercices classiques de S1. Lisez l'énoncé, cherchez la logique, puis consultez la solution.</p>
+            </header>
+
+            <!-- Exercice 1 -->
+            <div class="content-card relative border-l-4 border-l-brand-500">
+                <div class="absolute top-4 right-6 text-slate-200 text-4xl font-extrabold opacity-50">#1</div>
+                <h3 class="text-xl font-bold text-slate-800 mb-2">Volume d'un cylindre</h3>
+                <p class="text-slate-600 mb-6 bg-slate-50 p-4 rounded-lg border border-slate-100">
+                    <strong>Énoncé :</strong> Écrivez un algorithme qui demande à l'utilisateur de saisir le rayon (R) et la hauteur (H) d'un cylindre. L'algorithme doit calculer et afficher son volume (Formule: V = 3.14 * R * R * H).
+                </p>
+                <button onclick="toggleTD('sol-ex1', this)" class="bg-slate-800 hover:bg-slate-900 text-white font-medium py-2 px-4 rounded transition-colors text-sm flex items-center gap-2">
+                    <i class="fa-solid fa-eye"></i> Afficher la Solution
+                </button>
+                <div id="sol-ex1" class="hidden mt-4">
+<pre><code><span class="kw">Algorithme</span> <span class="var">Calcul_Volume</span>
+<span class="kw">Variables</span>
+    <span class="var">R</span>, <span class="var">H</span>, <span class="var">V</span> : <span class="typ">Réel</span>
+<span class="kw">Début</span>
+    <span class="fn">Ecrire</span>(<span class="str">"Saisir le rayon :"</span>)
+    <span class="fn">Lire</span>(<span class="var">R</span>)
+    <span class="fn">Ecrire</span>(<span class="str">"Saisir la hauteur :"</span>)
+    <span class="fn">Lire</span>(<span class="var">H</span>)
+    
+    <span class="var">V</span> <span class="op">&lt;-</span> 3.14 <span class="op">*</span> <span class="var">R</span> <span class="op">*</span> <span class="var">R</span> <span class="op">*</span> <span class="var">H</span>
+    
+    <span class="fn">Ecrire</span>(<span class="str">"Le volume est : "</span>, <span class="var">V</span>)
+<span class="kw">Fin</span></code></pre>
+                </div>
+            </div>
+
+            <!-- Exercice 2 -->
+            <div class="content-card relative border-l-4 border-l-brand-500 mt-6">
+                <div class="absolute top-4 right-6 text-slate-200 text-4xl font-extrabold opacity-50">#2</div>
+                <h3 class="text-xl font-bold text-slate-800 mb-2">Le Maximum de 3 nombres</h3>
+                <p class="text-slate-600 mb-6 bg-slate-50 p-4 rounded-lg border border-slate-100">
+                    <strong>Énoncé :</strong> Écrivez un algorithme qui lit 3 entiers saisis par l'utilisateur et affiche le plus grand des trois.
+                </p>
+                <button onclick="toggleTD('sol-ex2', this)" class="bg-slate-800 hover:bg-slate-900 text-white font-medium py-2 px-4 rounded transition-colors text-sm flex items-center gap-2">
+                    <i class="fa-solid fa-eye"></i> Afficher la Solution
+                </button>
+                <div id="sol-ex2" class="hidden mt-4">
+<pre><code><span class="kw">Algorithme</span> <span class="var">Max_Trois</span>
+<span class="kw">Variables</span>
+    <span class="var">A</span>, <span class="var">B</span>, <span class="var">C</span>, <span class="var">Max</span> : <span class="typ">Entier</span>
+<span class="kw">Début</span>
+    <span class="fn">Ecrire</span>(<span class="str">"Saisir 3 entiers :"</span>)
+    <span class="fn">Lire</span>(<span class="var">A</span>, <span class="var">B</span>, <span class="var">C</span>)
+    
+    <span class="com">// On suppose d'abord que A est le max</span>
+    <span class="var">Max</span> <span class="op">&lt;-</span> <span class="var">A</span>
+    
+    <span class="kw">Si</span> (<span class="var">B</span> <span class="op">&gt;</span> <span class="var">Max</span>) <span class="kw">Alors</span>
+        <span class="var">Max</span> <span class="op">&lt;-</span> <span class="var">B</span>
+    <span class="kw">FinSi</span>
+    
+    <span class="kw">Si</span> (<span class="var">C</span> <span class="op">&gt;</span> <span class="var">Max</span>) <span class="kw">Alors</span>
+        <span class="var">Max</span> <span class="op">&lt;-</span> <span class="var">C</span>
+    <span class="kw">FinSi</span>
+    
+    <span class="fn">Ecrire</span>(<span class="str">"Le maximum est : "</span>, <span class="var">Max</span>)
+<span class="kw">Fin</span></code></pre>
+                </div>
+            </div>
+
+            <!-- Exercice 3 -->
+            <div class="content-card relative border-l-4 border-l-brand-500 mt-6">
+                <div class="absolute top-4 right-6 text-slate-200 text-4xl font-extrabold opacity-50">#3</div>
+                <h3 class="text-xl font-bold text-slate-800 mb-2">Calcul de la Factorielle</h3>
+                <p class="text-slate-600 mb-6 bg-slate-50 p-4 rounded-lg border border-slate-100">
+                    <strong>Énoncé :</strong> Écrivez un algorithme qui demande un nombre entier positif N et calcule sa factorielle (N! = 1 * 2 * 3 * ... * N). Utilisez une boucle de contrôle pour la saisie.
+                </p>
+                <button onclick="toggleTD('sol-ex3', this)" class="bg-slate-800 hover:bg-slate-900 text-white font-medium py-2 px-4 rounded transition-colors text-sm flex items-center gap-2">
+                    <i class="fa-solid fa-eye"></i> Afficher la Solution
+                </button>
+                <div id="sol-ex3" class="hidden mt-4">
+<pre><code><span class="kw">Algorithme</span> <span class="var">Factorielle</span>
+<span class="kw">Variables</span>
+    <span class="var">N</span>, <span class="var">i</span>, <span class="var">Fact</span> : <span class="typ">Entier</span>
+<span class="kw">Début</span>
+    <span class="com">// Contrôle de saisie (N doit être >= 0)</span>
+    <span class="kw">Répéter</span>
+        <span class="fn">Ecrire</span>(<span class="str">"Saisir un entier positif N :"</span>)
+        <span class="fn">Lire</span>(<span class="var">N</span>)
+    <span class="kw">Jusqu'a</span> (<span class="var">N</span> <span class="op">&gt;=</span> 0)
+    
+    <span class="var">Fact</span> <span class="op">&lt;-</span> 1
+    
+    <span class="kw">Pour</span> <span class="var">i</span> <span class="kw">De</span> 1 <span class="kw">A</span> <span class="var">N</span> <span class="kw">Faire</span>
+        <span class="var">Fact</span> <span class="op">&lt;-</span> <span class="var">Fact</span> <span class="op">*</span> <span class="var">i</span>
+    <span class="kw">FinPour</span>
+    
+    <span class="fn">Ecrire</span>(<span class="str">"La factorielle de "</span>, <span class="var">N</span>, <span class="str">" est "</span>, <span class="var">Fact</span>)
+<span class="kw">Fin</span></code></pre>
+                </div>
+            </div>
+
+            <!-- Exercice 4 -->
+            <div class="content-card relative border-l-4 border-l-brand-500 mt-6">
+                <div class="absolute top-4 right-6 text-slate-200 text-4xl font-extrabold opacity-50">#4</div>
+                <h3 class="text-xl font-bold text-slate-800 mb-2">Nombre Premier</h3>
+                <p class="text-slate-600 mb-6 bg-slate-50 p-4 rounded-lg border border-slate-100">
+                    <strong>Énoncé :</strong> Écrire un algorithme qui demande un entier positif et vérifie s'il est premier. Un nombre premier n'est divisible que par 1 et par lui-même.
+                </p>
+                <button onclick="toggleTD('sol-ex4', this)" class="bg-slate-800 hover:bg-slate-900 text-white font-medium py-2 px-4 rounded transition-colors text-sm flex items-center gap-2">
+                    <i class="fa-solid fa-eye"></i> Afficher la Solution
+                </button>
+                <div id="sol-ex4" class="hidden mt-4">
+<pre><code><span class="kw">Algorithme</span> <span class="var">Test_Premier</span>
+<span class="kw">Variables</span>
+    <span class="var">N</span>, <span class="var">i</span>, <span class="var">nb_diviseurs</span> : <span class="typ">Entier</span>
+<span class="kw">Début</span>
+    <span class="fn">Ecrire</span>(<span class="str">"Saisir un nombre positif :"</span>)
+    <span class="fn">Lire</span>(<span class="var">N</span>)
+    
+    <span class="var">nb_diviseurs</span> <span class="op">&lt;-</span> 0
+    
+    <span class="com">// On compte les diviseurs de 1 à N</span>
+    <span class="kw">Pour</span> <span class="var">i</span> <span class="kw">De</span> 1 <span class="kw">A</span> <span class="var">N</span> <span class="kw">Faire</span>
+        <span class="kw">Si</span> (<span class="var">N</span> <span class="op">MOD</span> <span class="var">i</span> <span class="op">=</span> 0) <span class="kw">Alors</span>
+            <span class="var">nb_diviseurs</span> <span class="op">&lt;-</span> <span class="var">nb_diviseurs</span> <span class="op">+</span> 1
+        <span class="kw">FinSi</span>
+    <span class="kw">FinPour</span>
+    
+    <span class="com">// S'il y a exactement 2 diviseurs (1 et lui-même)</span>
+    <span class="kw">Si</span> (<span class="var">nb_diviseurs</span> <span class="op">=</span> 2) <span class="kw">Alors</span>
+        <span class="fn">Ecrire</span>(<span class="var">N</span>, <span class="str">" est un nombre premier."</span>)
+    <span class="kw">Sinon</span>
+        <span class="fn">Ecrire</span>(<span class="var">N</span>, <span class="str">" n'est pas premier."</span>)
+    <span class="kw">FinSi</span>
+<span class="kw">Fin</span></code></pre>
+                </div>
+            </div>
+
+            <!-- Exercice 5 -->
+            <div class="content-card relative border-l-4 border-l-brand-500 mt-6">
+                <div class="absolute top-4 right-6 text-slate-200 text-4xl font-extrabold opacity-50">#5</div>
+                <span class="inline-block text-xs font-semibold px-2.5 py-1 rounded-full mb-2 bg-slate-100 text-slate-600">Variables</span>
+                <h3 class="text-xl font-bold text-slate-800 mb-2">Échange de deux variables</h3>
+                <p class="text-slate-600 mb-6 bg-slate-50 p-4 rounded-lg border border-slate-100">
+                    <strong>Énoncé :</strong> Écrivez un algorithme qui lit deux entiers A et B, échange leurs valeurs (sans perdre aucune donnée), puis affiche A et B.
+                </p>
+                <button onclick="toggleTD('sol-ex5', this)" class="bg-slate-800 hover:bg-slate-900 text-white font-medium py-2 px-4 rounded transition-colors text-sm flex items-center gap-2">
+                    <i class="fa-solid fa-eye"></i> Afficher la Solution
+                </button>
+                <div id="sol-ex5" class="hidden mt-4">
+<pre><code><span class="kw">Algorithme</span> <span class="var">Echange</span>
+<span class="kw">Variables</span>
+    <span class="var">X</span>, <span class="var">Y</span>, <span class="var">Temp</span> : <span class="typ">Entier</span>
+<span class="kw">Début</span>
+    <span class="fn">Ecrire</span>(<span class="str">"Saisir X et Y :"</span>)
+    <span class="fn">Lire</span>(<span class="var">X</span>, <span class="var">Y</span>)
+
+    <span class="com">// Il faut une variable temporaire pour ne rien perdre</span>
+    <span class="var">Temp</span> <span class="op">&lt;-</span> <span class="var">X</span>
+    <span class="var">X</span> <span class="op">&lt;-</span> <span class="var">Y</span>
+    <span class="var">Y</span> <span class="op">&lt;-</span> <span class="var">Temp</span>
+
+    <span class="fn">Ecrire</span>(<span class="str">"Après échange : X = "</span>, <span class="var">X</span>, <span class="str">" et Y = "</span>, <span class="var">Y</span>)
+<span class="kw">Fin</span></code></pre>
+                </div>
+            </div>
+
+            <!-- Exercice 6 -->
+            <div class="content-card relative border-l-4 border-l-brand-500 mt-6">
+                <div class="absolute top-4 right-6 text-slate-200 text-4xl font-extrabold opacity-50">#6</div>
+                <span class="inline-block text-xs font-semibold px-2.5 py-1 rounded-full mb-2 bg-amber-100 text-amber-700">Conditions</span>
+                <h3 class="text-xl font-bold text-slate-800 mb-2">Pair ou Impair</h3>
+                <p class="text-slate-600 mb-6 bg-slate-50 p-4 rounded-lg border border-slate-100">
+                    <strong>Énoncé :</strong> Écrivez un algorithme qui lit un entier N et indique s'il est pair ou impair.
+                </p>
+                <button onclick="toggleTD('sol-ex6', this)" class="bg-slate-800 hover:bg-slate-900 text-white font-medium py-2 px-4 rounded transition-colors text-sm flex items-center gap-2">
+                    <i class="fa-solid fa-eye"></i> Afficher la Solution
+                </button>
+                <div id="sol-ex6" class="hidden mt-4">
+<pre><code><span class="kw">Algorithme</span> <span class="var">Pair_Impair</span>
+<span class="kw">Variables</span>
+    <span class="var">N</span> : <span class="typ">Entier</span>
+<span class="kw">Début</span>
+    <span class="fn">Ecrire</span>(<span class="str">"Saisir un entier :"</span>)
+    <span class="fn">Lire</span>(<span class="var">N</span>)
+
+    <span class="com">// Un nombre pair a un reste nul dans la division par 2</span>
+    <span class="kw">Si</span> (<span class="var">N</span> <span class="op">MOD</span> 2 <span class="op">=</span> 0) <span class="kw">Alors</span>
+        <span class="fn">Ecrire</span>(<span class="var">N</span>, <span class="str">" est pair."</span>)
+    <span class="kw">Sinon</span>
+        <span class="fn">Ecrire</span>(<span class="var">N</span>, <span class="str">" est impair."</span>)
+    <span class="kw">FinSi</span>
+<span class="kw">Fin</span></code></pre>
+                </div>
+            </div>
+
+            <!-- Exercice 7 -->
+            <div class="content-card relative border-l-4 border-l-brand-500 mt-6">
+                <div class="absolute top-4 right-6 text-slate-200 text-4xl font-extrabold opacity-50">#7</div>
+                <span class="inline-block text-xs font-semibold px-2.5 py-1 rounded-full mb-2 bg-amber-100 text-amber-700">Conditions</span>
+                <h3 class="text-xl font-bold text-slate-800 mb-2">Équation du premier degré</h3>
+                <p class="text-slate-600 mb-6 bg-slate-50 p-4 rounded-lg border border-slate-100">
+                    <strong>Énoncé :</strong> Écrivez un algorithme qui résout l'équation a·x + b = 0 pour des réels a et b saisis par l'utilisateur. Attention aux cas particuliers (a = 0).
+                </p>
+                <button onclick="toggleTD('sol-ex7', this)" class="bg-slate-800 hover:bg-slate-900 text-white font-medium py-2 px-4 rounded transition-colors text-sm flex items-center gap-2">
+                    <i class="fa-solid fa-eye"></i> Afficher la Solution
+                </button>
+                <div id="sol-ex7" class="hidden mt-4">
+<pre><code><span class="kw">Algorithme</span> <span class="var">Equation_1er_Degre</span>
+<span class="kw">Variables</span>
+    <span class="var">a</span>, <span class="var">b</span>, <span class="var">x</span> : <span class="typ">Réel</span>
+<span class="kw">Début</span>
+    <span class="fn">Ecrire</span>(<span class="str">"Saisir a et b :"</span>)
+    <span class="fn">Lire</span>(<span class="var">a</span>, <span class="var">b</span>)
+
+    <span class="kw">Si</span> (<span class="var">a</span> <span class="op">&lt;&gt;</span> 0) <span class="kw">Alors</span>
+        <span class="var">x</span> <span class="op">&lt;-</span> <span class="op">-</span><span class="var">b</span> <span class="op">/</span> <span class="var">a</span>
+        <span class="fn">Ecrire</span>(<span class="str">"La solution est x = "</span>, <span class="var">x</span>)
+    <span class="kw">Sinon</span>
+        <span class="kw">Si</span> (<span class="var">b</span> <span class="op">=</span> 0) <span class="kw">Alors</span>
+            <span class="fn">Ecrire</span>(<span class="str">"Tout réel est solution."</span>)
+        <span class="kw">Sinon</span>
+            <span class="fn">Ecrire</span>(<span class="str">"Aucune solution."</span>)
+        <span class="kw">FinSi</span>
+    <span class="kw">FinSi</span>
+<span class="kw">Fin</span></code></pre>
+                </div>
+            </div>
+
+            <!-- Exercice 8 -->
+            <div class="content-card relative border-l-4 border-l-brand-500 mt-6">
+                <div class="absolute top-4 right-6 text-slate-200 text-4xl font-extrabold opacity-50">#8</div>
+                <span class="inline-block text-xs font-semibold px-2.5 py-1 rounded-full mb-2 bg-amber-100 text-amber-700">Conditions</span>
+                <h3 class="text-xl font-bold text-slate-800 mb-2">Calculatrice avec Selon</h3>
+                <p class="text-slate-600 mb-6 bg-slate-50 p-4 rounded-lg border border-slate-100">
+                    <strong>Énoncé :</strong> Écrivez un algorithme qui lit deux réels et un opérateur (+, -, *, /) puis affiche le résultat. Gérez la division par zéro et l'opérateur invalide.
+                </p>
+                <button onclick="toggleTD('sol-ex8', this)" class="bg-slate-800 hover:bg-slate-900 text-white font-medium py-2 px-4 rounded transition-colors text-sm flex items-center gap-2">
+                    <i class="fa-solid fa-eye"></i> Afficher la Solution
+                </button>
+                <div id="sol-ex8" class="hidden mt-4">
+<pre><code><span class="kw">Algorithme</span> <span class="var">Calculatrice</span>
+<span class="kw">Variables</span>
+    <span class="var">a</span>, <span class="var">b</span> : <span class="typ">Réel</span>
+    <span class="var">op</span> : <span class="typ">Chaîne</span>
+<span class="kw">Début</span>
+    <span class="fn">Ecrire</span>(<span class="str">"Saisir a, l'opérateur, puis b :"</span>)
+    <span class="fn">Lire</span>(<span class="var">a</span>, <span class="var">op</span>, <span class="var">b</span>)
+
+    <span class="kw">Selon</span> (<span class="var">op</span>) <span class="kw">Faire</span>
+        <span class="str">"+"</span> : <span class="fn">Ecrire</span>(<span class="var">a</span> <span class="op">+</span> <span class="var">b</span>)
+        <span class="str">"-"</span> : <span class="fn">Ecrire</span>(<span class="var">a</span> <span class="op">-</span> <span class="var">b</span>)
+        <span class="str">"*"</span> : <span class="fn">Ecrire</span>(<span class="var">a</span> <span class="op">*</span> <span class="var">b</span>)
+        <span class="str">"/"</span> : <span class="kw">Si</span> (<span class="var">b</span> <span class="op">=</span> 0) <span class="kw">Alors</span>
+                  <span class="fn">Ecrire</span>(<span class="str">"Division par zéro impossible !"</span>)
+              <span class="kw">Sinon</span>
+                  <span class="fn">Ecrire</span>(<span class="var">a</span> <span class="op">/</span> <span class="var">b</span>)
+              <span class="kw">FinSi</span>
+        <span class="kw">Sinon</span> : <span class="fn">Ecrire</span>(<span class="str">"Opérateur invalide"</span>)
+    <span class="kw">FinSelon</span>
+<span class="kw">Fin</span></code></pre>
+                </div>
+            </div>
+
+            <!-- Exercice 9 -->
+            <div class="content-card relative border-l-4 border-l-brand-500 mt-6">
+                <div class="absolute top-4 right-6 text-slate-200 text-4xl font-extrabold opacity-50">#9</div>
+                <span class="inline-block text-xs font-semibold px-2.5 py-1 rounded-full mb-2 bg-sky-100 text-sky-700">Boucles</span>
+                <h3 class="text-xl font-bold text-slate-800 mb-2">Somme des N premiers entiers</h3>
+                <p class="text-slate-600 mb-6 bg-slate-50 p-4 rounded-lg border border-slate-100">
+                    <strong>Énoncé :</strong> Écrivez un algorithme qui lit un entier N positif et calcule la somme S = 1 + 2 + 3 + ... + N.
+                </p>
+                <button onclick="toggleTD('sol-ex9', this)" class="bg-slate-800 hover:bg-slate-900 text-white font-medium py-2 px-4 rounded transition-colors text-sm flex items-center gap-2">
+                    <i class="fa-solid fa-eye"></i> Afficher la Solution
+                </button>
+                <div id="sol-ex9" class="hidden mt-4">
+<pre><code><span class="kw">Algorithme</span> <span class="var">Somme_N</span>
+<span class="kw">Variables</span>
+    <span class="var">N</span>, <span class="var">i</span>, <span class="var">S</span> : <span class="typ">Entier</span>
+<span class="kw">Début</span>
+    <span class="kw">Répéter</span>
+        <span class="fn">Ecrire</span>(<span class="str">"Saisir N (positif) :"</span>)
+        <span class="fn">Lire</span>(<span class="var">N</span>)
+    <span class="kw">Jusqu'a</span> (<span class="var">N</span> <span class="op">&gt;</span> 0)
+
+    <span class="var">S</span> <span class="op">&lt;-</span> 0
+    <span class="kw">Pour</span> <span class="var">i</span> <span class="kw">De</span> 1 <span class="kw">A</span> <span class="var">N</span> <span class="kw">Faire</span>
+        <span class="var">S</span> <span class="op">&lt;-</span> <span class="var">S</span> <span class="op">+</span> <span class="var">i</span>
+    <span class="kw">FinPour</span>
+
+    <span class="fn">Ecrire</span>(<span class="str">"La somme est : "</span>, <span class="var">S</span>)
+<span class="kw">Fin</span></code></pre>
+                </div>
+            </div>
+
+            <!-- Exercice 10 -->
+            <div class="content-card relative border-l-4 border-l-brand-500 mt-6">
+                <div class="absolute top-4 right-6 text-slate-200 text-4xl font-extrabold opacity-50">#10</div>
+                <span class="inline-block text-xs font-semibold px-2.5 py-1 rounded-full mb-2 bg-sky-100 text-sky-700">Boucles</span>
+                <h3 class="text-xl font-bold text-slate-800 mb-2">Table de multiplication</h3>
+                <p class="text-slate-600 mb-6 bg-slate-50 p-4 rounded-lg border border-slate-100">
+                    <strong>Énoncé :</strong> Écrivez un algorithme qui lit un entier N et affiche sa table de multiplication de 1 à 10 (sous la forme N x i = résultat).
+                </p>
+                <button onclick="toggleTD('sol-ex10', this)" class="bg-slate-800 hover:bg-slate-900 text-white font-medium py-2 px-4 rounded transition-colors text-sm flex items-center gap-2">
+                    <i class="fa-solid fa-eye"></i> Afficher la Solution
+                </button>
+                <div id="sol-ex10" class="hidden mt-4">
+<pre><code><span class="kw">Algorithme</span> <span class="var">Table_Multiplication</span>
+<span class="kw">Variables</span>
+    <span class="var">N</span>, <span class="var">i</span> : <span class="typ">Entier</span>
+<span class="kw">Début</span>
+    <span class="fn">Ecrire</span>(<span class="str">"Saisir un entier :"</span>)
+    <span class="fn">Lire</span>(<span class="var">N</span>)
+
+    <span class="kw">Pour</span> <span class="var">i</span> <span class="kw">De</span> 1 <span class="kw">A</span> 10 <span class="kw">Faire</span>
+        <span class="fn">Ecrire</span>(<span class="var">N</span>, <span class="str">" x "</span>, <span class="var">i</span>, <span class="str">" = "</span>, <span class="var">N</span> <span class="op">*</span> <span class="var">i</span>)
+    <span class="kw">FinPour</span>
+<span class="kw">Fin</span></code></pre>
+                </div>
+            </div>
+
+            <!-- Exercice 11 -->
+            <div class="content-card relative border-l-4 border-l-brand-500 mt-6">
+                <div class="absolute top-4 right-6 text-slate-200 text-4xl font-extrabold opacity-50">#11</div>
+                <span class="inline-block text-xs font-semibold px-2.5 py-1 rounded-full mb-2 bg-sky-100 text-sky-700">Boucles</span>
+                <h3 class="text-xl font-bold text-slate-800 mb-2">Puissance sans opérateur</h3>
+                <p class="text-slate-600 mb-6 bg-slate-50 p-4 rounded-lg border border-slate-100">
+                    <strong>Énoncé :</strong> Écrivez un algorithme qui calcule X puissance N (X réel, N entier positif) en utilisant uniquement des multiplications successives.
+                </p>
+                <button onclick="toggleTD('sol-ex11', this)" class="bg-slate-800 hover:bg-slate-900 text-white font-medium py-2 px-4 rounded transition-colors text-sm flex items-center gap-2">
+                    <i class="fa-solid fa-eye"></i> Afficher la Solution
+                </button>
+                <div id="sol-ex11" class="hidden mt-4">
+<pre><code><span class="kw">Algorithme</span> <span class="var">Puissance</span>
+<span class="kw">Variables</span>
+    <span class="var">X</span>, <span class="var">P</span> : <span class="typ">Réel</span>
+    <span class="var">N</span>, <span class="var">i</span> : <span class="typ">Entier</span>
+<span class="kw">Début</span>
+    <span class="fn">Ecrire</span>(<span class="str">"Saisir X et N :"</span>)
+    <span class="fn">Lire</span>(<span class="var">X</span>, <span class="var">N</span>)
+
+    <span class="var">P</span> <span class="op">&lt;-</span> 1
+    <span class="kw">Pour</span> <span class="var">i</span> <span class="kw">De</span> 1 <span class="kw">A</span> <span class="var">N</span> <span class="kw">Faire</span>
+        <span class="var">P</span> <span class="op">&lt;-</span> <span class="var">P</span> <span class="op">*</span> <span class="var">X</span>
+    <span class="kw">FinPour</span>
+
+    <span class="fn">Ecrire</span>(<span class="var">X</span>, <span class="str">" puissance "</span>, <span class="var">N</span>, <span class="str">" = "</span>, <span class="var">P</span>)
+<span class="kw">Fin</span></code></pre>
+                </div>
+            </div>
+
+            <!-- Exercice 12 -->
+            <div class="content-card relative border-l-4 border-l-brand-500 mt-6">
+                <div class="absolute top-4 right-6 text-slate-200 text-4xl font-extrabold opacity-50">#12</div>
+                <span class="inline-block text-xs font-semibold px-2.5 py-1 rounded-full mb-2 bg-sky-100 text-sky-700">Boucles</span>
+                <h3 class="text-xl font-bold text-slate-800 mb-2">Somme des chiffres d'un nombre</h3>
+                <p class="text-slate-600 mb-6 bg-slate-50 p-4 rounded-lg border border-slate-100">
+                    <strong>Énoncé :</strong> Écrivez un algorithme qui lit un entier positif N et calcule la somme de ses chiffres. Exemple : pour 1234, le résultat est 1 + 2 + 3 + 4 = 10.
+                </p>
+                <button onclick="toggleTD('sol-ex12', this)" class="bg-slate-800 hover:bg-slate-900 text-white font-medium py-2 px-4 rounded transition-colors text-sm flex items-center gap-2">
+                    <i class="fa-solid fa-eye"></i> Afficher la Solution
+                </button>
+                <div id="sol-ex12" class="hidden mt-4">
+<pre><code><span class="kw">Algorithme</span> <span class="var">Somme_Chiffres</span>
+<span class="kw">Variables</span>
+    <span class="var">N</span>, <span class="var">S</span>, <span class="var">reste</span> : <span class="typ">Entier</span>
+<span class="kw">Début</span>
+    <span class="fn">Ecrire</span>(<span class="str">"Saisir un entier positif :"</span>)
+    <span class="fn">Lire</span>(<span class="var">N</span>)
+
+    <span class="var">S</span> <span class="op">&lt;-</span> 0
+    <span class="kw">Tant Que</span> (<span class="var">N</span> <span class="op">&gt;</span> 0) <span class="kw">Faire</span>
+        <span class="var">reste</span> <span class="op">&lt;-</span> <span class="var">N</span> <span class="op">MOD</span> 10      <span class="com">// dernier chiffre</span>
+        <span class="var">S</span> <span class="op">&lt;-</span> <span class="var">S</span> <span class="op">+</span> <span class="var">reste</span>
+        <span class="var">N</span> <span class="op">&lt;-</span> <span class="var">N</span> <span class="op">DIV</span> 10          <span class="com">// on retire le dernier chiffre</span>
+    <span class="kw">FinTantQue</span>
+
+    <span class="fn">Ecrire</span>(<span class="str">"La somme des chiffres est : "</span>, <span class="var">S</span>)
+<span class="kw">Fin</span></code></pre>
+                </div>
+            </div>
+
+            <!-- Exercice 13 -->
+            <div class="content-card relative border-l-4 border-l-brand-500 mt-6">
+                <div class="absolute top-4 right-6 text-slate-200 text-4xl font-extrabold opacity-50">#13</div>
+                <span class="inline-block text-xs font-semibold px-2.5 py-1 rounded-full mb-2 bg-sky-100 text-sky-700">Boucles</span>
+                <h3 class="text-xl font-bold text-slate-800 mb-2">Nombre miroir (inverse)</h3>
+                <p class="text-slate-600 mb-6 bg-slate-50 p-4 rounded-lg border border-slate-100">
+                    <strong>Énoncé :</strong> Écrivez un algorithme qui lit un entier positif N et affiche son inverse. Exemple : pour 1234, il affiche 4321.
+                </p>
+                <button onclick="toggleTD('sol-ex13', this)" class="bg-slate-800 hover:bg-slate-900 text-white font-medium py-2 px-4 rounded transition-colors text-sm flex items-center gap-2">
+                    <i class="fa-solid fa-eye"></i> Afficher la Solution
+                </button>
+                <div id="sol-ex13" class="hidden mt-4">
+<pre><code><span class="kw">Algorithme</span> <span class="var">Inverse_Nombre</span>
+<span class="kw">Variables</span>
+    <span class="var">N</span>, <span class="var">Inv</span>, <span class="var">reste</span> : <span class="typ">Entier</span>
+<span class="kw">Début</span>
+    <span class="fn">Ecrire</span>(<span class="str">"Saisir un entier positif :"</span>)
+    <span class="fn">Lire</span>(<span class="var">N</span>)
+
+    <span class="var">Inv</span> <span class="op">&lt;-</span> 0
+    <span class="kw">Tant Que</span> (<span class="var">N</span> <span class="op">&gt;</span> 0) <span class="kw">Faire</span>
+        <span class="var">reste</span> <span class="op">&lt;-</span> <span class="var">N</span> <span class="op">MOD</span> 10
+        <span class="var">Inv</span> <span class="op">&lt;-</span> <span class="var">Inv</span> <span class="op">*</span> 10 <span class="op">+</span> <span class="var">reste</span>    <span class="com">// on ajoute le chiffre à droite</span>
+        <span class="var">N</span> <span class="op">&lt;-</span> <span class="var">N</span> <span class="op">DIV</span> 10
+    <span class="kw">FinTantQue</span>
+
+    <span class="fn">Ecrire</span>(<span class="str">"Le nombre inversé est : "</span>, <span class="var">Inv</span>)
+<span class="kw">Fin</span></code></pre>
+                </div>
+            </div>
+
+            <!-- Exercice 14 -->
+            <div class="content-card relative border-l-4 border-l-brand-500 mt-6">
+                <div class="absolute top-4 right-6 text-slate-200 text-4xl font-extrabold opacity-50">#14</div>
+                <span class="inline-block text-xs font-semibold px-2.5 py-1 rounded-full mb-2 bg-sky-100 text-sky-700">Boucles</span>
+                <h3 class="text-xl font-bold text-slate-800 mb-2">Suite de Fibonacci</h3>
+                <p class="text-slate-600 mb-6 bg-slate-50 p-4 rounded-lg border border-slate-100">
+                    <strong>Énoncé :</strong> Écrivez un algorithme qui affiche les N premiers termes de la suite de Fibonacci (0, 1, 1, 2, 3, 5, 8, ...) où chaque terme est la somme des deux précédents.
+                </p>
+                <button onclick="toggleTD('sol-ex14', this)" class="bg-slate-800 hover:bg-slate-900 text-white font-medium py-2 px-4 rounded transition-colors text-sm flex items-center gap-2">
+                    <i class="fa-solid fa-eye"></i> Afficher la Solution
+                </button>
+                <div id="sol-ex14" class="hidden mt-4">
+<pre><code><span class="kw">Algorithme</span> <span class="var">Fibonacci</span>
+<span class="kw">Variables</span>
+    <span class="var">N</span>, <span class="var">i</span>, <span class="var">a</span>, <span class="var">b</span>, <span class="var">suivant</span> : <span class="typ">Entier</span>
+<span class="kw">Début</span>
+    <span class="fn">Ecrire</span>(<span class="str">"Combien de termes ?"</span>)
+    <span class="fn">Lire</span>(<span class="var">N</span>)
+
+    <span class="var">a</span> <span class="op">&lt;-</span> 0
+    <span class="var">b</span> <span class="op">&lt;-</span> 1
+    <span class="kw">Pour</span> <span class="var">i</span> <span class="kw">De</span> 1 <span class="kw">A</span> <span class="var">N</span> <span class="kw">Faire</span>
+        <span class="fn">Ecrire</span>(<span class="var">a</span>)
+        <span class="var">suivant</span> <span class="op">&lt;-</span> <span class="var">a</span> <span class="op">+</span> <span class="var">b</span>
+        <span class="var">a</span> <span class="op">&lt;-</span> <span class="var">b</span>
+        <span class="var">b</span> <span class="op">&lt;-</span> <span class="var">suivant</span>
+    <span class="kw">FinPour</span>
+<span class="kw">Fin</span></code></pre>
+                </div>
+            </div>
+
+            <!-- Exercice 15 -->
+            <div class="content-card relative border-l-4 border-l-brand-500 mt-6">
+                <div class="absolute top-4 right-6 text-slate-200 text-4xl font-extrabold opacity-50">#15</div>
+                <span class="inline-block text-xs font-semibold px-2.5 py-1 rounded-full mb-2 bg-sky-100 text-sky-700">Boucles</span>
+                <h3 class="text-xl font-bold text-slate-800 mb-2">PGCD de deux nombres</h3>
+                <p class="text-slate-600 mb-6 bg-slate-50 p-4 rounded-lg border border-slate-100">
+                    <strong>Énoncé :</strong> Écrivez un algorithme qui lit deux entiers positifs et calcule leur PGCD avec l'algorithme d'Euclide (divisions successives).
+                </p>
+                <button onclick="toggleTD('sol-ex15', this)" class="bg-slate-800 hover:bg-slate-900 text-white font-medium py-2 px-4 rounded transition-colors text-sm flex items-center gap-2">
+                    <i class="fa-solid fa-eye"></i> Afficher la Solution
+                </button>
+                <div id="sol-ex15" class="hidden mt-4">
+<pre><code><span class="kw">Algorithme</span> <span class="var">PGCD_Euclide</span>
+<span class="kw">Variables</span>
+    <span class="var">a</span>, <span class="var">b</span>, <span class="var">r</span> : <span class="typ">Entier</span>
+<span class="kw">Début</span>
+    <span class="fn">Ecrire</span>(<span class="str">"Saisir deux entiers positifs :"</span>)
+    <span class="fn">Lire</span>(<span class="var">a</span>, <span class="var">b</span>)
+
+    <span class="com">// On remplace (a, b) par (b, a MOD b) jusqu'à obtenir un reste nul</span>
+    <span class="kw">Tant Que</span> (<span class="var">b</span> <span class="op">&lt;&gt;</span> 0) <span class="kw">Faire</span>
+        <span class="var">r</span> <span class="op">&lt;-</span> <span class="var">a</span> <span class="op">MOD</span> <span class="var">b</span>
+        <span class="var">a</span> <span class="op">&lt;-</span> <span class="var">b</span>
+        <span class="var">b</span> <span class="op">&lt;-</span> <span class="var">r</span>
+    <span class="kw">FinTantQue</span>
+
+    <span class="fn">Ecrire</span>(<span class="str">"Le PGCD est : "</span>, <span class="var">a</span>)
+<span class="kw">Fin</span></code></pre>
+                </div>
+            </div>
+
+            <!-- Exercice 16 -->
+            <div class="content-card relative border-l-4 border-l-brand-500 mt-6">
+                <div class="absolute top-4 right-6 text-slate-200 text-4xl font-extrabold opacity-50">#16</div>
+                <span class="inline-block text-xs font-semibold px-2.5 py-1 rounded-full mb-2 bg-purple-100 text-purple-700">Sous-programmes</span>
+                <h3 class="text-xl font-bold text-slate-800 mb-2">Fonction : Maximum de deux nombres</h3>
+                <p class="text-slate-600 mb-6 bg-slate-50 p-4 rounded-lg border border-slate-100">
+                    <strong>Énoncé :</strong> Écrivez une fonction Max2(a, b) qui retourne le plus grand de deux entiers, puis utilisez-la dans un algorithme principal pour trouver le maximum de trois entiers.
+                </p>
+                <button onclick="toggleTD('sol-ex16', this)" class="bg-slate-800 hover:bg-slate-900 text-white font-medium py-2 px-4 rounded transition-colors text-sm flex items-center gap-2">
+                    <i class="fa-solid fa-eye"></i> Afficher la Solution
+                </button>
+                <div id="sol-ex16" class="hidden mt-4">
+<pre><code><span class="kw">Fonction</span> <span class="fn">Max2</span>(<span class="var">a</span> : <span class="typ">Entier</span>, <span class="var">b</span> : <span class="typ">Entier</span>) : <span class="typ">Entier</span>
+<span class="kw">Début</span>
+    <span class="kw">Si</span> (<span class="var">a</span> <span class="op">&gt;</span> <span class="var">b</span>) <span class="kw">Alors</span>
+        <span class="kw">Retourner</span> <span class="var">a</span>
+    <span class="kw">Sinon</span>
+        <span class="kw">Retourner</span> <span class="var">b</span>
+    <span class="kw">FinSi</span>
+<span class="kw">FinFonction</span>
+
+<span class="kw">Algorithme</span> <span class="var">Max_Trois_Fonction</span>
+<span class="kw">Variables</span>
+    <span class="var">x</span>, <span class="var">y</span>, <span class="var">z</span>, <span class="var">m</span> : <span class="typ">Entier</span>
+<span class="kw">Début</span>
+    <span class="fn">Ecrire</span>(<span class="str">"Saisir 3 entiers :"</span>)
+    <span class="fn">Lire</span>(<span class="var">x</span>, <span class="var">y</span>, <span class="var">z</span>)
+
+    <span class="com">// Max de trois = max( max(x, y), z )</span>
+    <span class="var">m</span> <span class="op">&lt;-</span> <span class="fn">Max2</span>(<span class="fn">Max2</span>(<span class="var">x</span>, <span class="var">y</span>), <span class="var">z</span>)
+
+    <span class="fn">Ecrire</span>(<span class="str">"Le maximum est : "</span>, <span class="var">m</span>)
+<span class="kw">Fin</span></code></pre>
+                </div>
+            </div>
+
+            <!-- Exercice 17 -->
+            <div class="content-card relative border-l-4 border-l-brand-500 mt-6">
+                <div class="absolute top-4 right-6 text-slate-200 text-4xl font-extrabold opacity-50">#17</div>
+                <span class="inline-block text-xs font-semibold px-2.5 py-1 rounded-full mb-2 bg-purple-100 text-purple-700">Sous-programmes</span>
+                <h3 class="text-xl font-bold text-slate-800 mb-2">Fonction : Nombre premier</h3>
+                <p class="text-slate-600 mb-6 bg-slate-50 p-4 rounded-lg border border-slate-100">
+                    <strong>Énoncé :</strong> Écrivez une fonction EstPremier(n) qui retourne Vrai si n est premier, Faux sinon. Utilisez-la pour afficher tous les nombres premiers entre 1 et 50.
+                </p>
+                <button onclick="toggleTD('sol-ex17', this)" class="bg-slate-800 hover:bg-slate-900 text-white font-medium py-2 px-4 rounded transition-colors text-sm flex items-center gap-2">
+                    <i class="fa-solid fa-eye"></i> Afficher la Solution
+                </button>
+                <div id="sol-ex17" class="hidden mt-4">
+<pre><code><span class="kw">Fonction</span> <span class="fn">EstPremier</span>(<span class="var">n</span> : <span class="typ">Entier</span>) : <span class="typ">Booléen</span>
+<span class="kw">Variables</span>
+    <span class="var">i</span> : <span class="typ">Entier</span>
+<span class="kw">Début</span>
+    <span class="kw">Si</span> (<span class="var">n</span> <span class="op">&lt;</span> 2) <span class="kw">Alors</span>
+        <span class="kw">Retourner</span> <span class="var">Faux</span>
+    <span class="kw">FinSi</span>
+
+    <span class="var">i</span> <span class="op">&lt;-</span> 2
+    <span class="kw">Tant Que</span> (<span class="var">i</span> <span class="op">*</span> <span class="var">i</span> <span class="op">&lt;=</span> <span class="var">n</span>) <span class="kw">Faire</span>
+        <span class="kw">Si</span> (<span class="var">n</span> <span class="op">MOD</span> <span class="var">i</span> <span class="op">=</span> 0) <span class="kw">Alors</span>
+            <span class="kw">Retourner</span> <span class="var">Faux</span>      <span class="com">// un diviseur a été trouvé</span>
+        <span class="kw">FinSi</span>
+        <span class="var">i</span> <span class="op">&lt;-</span> <span class="var">i</span> <span class="op">+</span> 1
+    <span class="kw">FinTantQue</span>
+
+    <span class="kw">Retourner</span> <span class="var">Vrai</span>
+<span class="kw">FinFonction</span>
+
+<span class="kw">Algorithme</span> <span class="var">Premiers_1_50</span>
+<span class="kw">Variables</span>
+    <span class="var">k</span> : <span class="typ">Entier</span>
+<span class="kw">Début</span>
+    <span class="kw">Pour</span> <span class="var">k</span> <span class="kw">De</span> 1 <span class="kw">A</span> 50 <span class="kw">Faire</span>
+        <span class="kw">Si</span> (<span class="fn">EstPremier</span>(<span class="var">k</span>)) <span class="kw">Alors</span>
+            <span class="fn">Ecrire</span>(<span class="var">k</span>)
+        <span class="kw">FinSi</span>
+    <span class="kw">FinPour</span>
+<span class="kw">Fin</span></code></pre>
+                </div>
+            </div>
+
+            <!-- Exercice 18 -->
+            <div class="content-card relative border-l-4 border-l-brand-500 mt-6">
+                <div class="absolute top-4 right-6 text-slate-200 text-4xl font-extrabold opacity-50">#18</div>
+                <span class="inline-block text-xs font-semibold px-2.5 py-1 rounded-full mb-2 bg-purple-100 text-purple-700">Sous-programmes</span>
+                <h3 class="text-xl font-bold text-slate-800 mb-2">Procédure : Dessiner un triangle</h3>
+                <p class="text-slate-600 mb-6 bg-slate-50 p-4 rounded-lg border border-slate-100">
+                    <strong>Énoncé :</strong> Écrivez une procédure Triangle(n) qui affiche un triangle d'étoiles de n lignes (1 étoile sur la première ligne, 2 sur la deuxième, etc.). Appelez-la depuis l'algorithme principal.
+                </p>
+                <button onclick="toggleTD('sol-ex18', this)" class="bg-slate-800 hover:bg-slate-900 text-white font-medium py-2 px-4 rounded transition-colors text-sm flex items-center gap-2">
+                    <i class="fa-solid fa-eye"></i> Afficher la Solution
+                </button>
+                <div id="sol-ex18" class="hidden mt-4">
+<pre><code><span class="kw">Procédure</span> <span class="fn">Triangle</span>(<span class="var">n</span> : <span class="typ">Entier</span>)
+<span class="kw">Variables</span>
+    <span class="var">i</span>, <span class="var">j</span> : <span class="typ">Entier</span>
+    <span class="var">ligne</span> : <span class="typ">Chaîne</span>
+<span class="kw">Début</span>
+    <span class="kw">Pour</span> <span class="var">i</span> <span class="kw">De</span> 1 <span class="kw">A</span> <span class="var">n</span> <span class="kw">Faire</span>
+        <span class="var">ligne</span> <span class="op">&lt;-</span> <span class="str">""</span>
+        <span class="kw">Pour</span> <span class="var">j</span> <span class="kw">De</span> 1 <span class="kw">A</span> <span class="var">i</span> <span class="kw">Faire</span>
+            <span class="var">ligne</span> <span class="op">&lt;-</span> <span class="var">ligne</span> <span class="op">+</span> <span class="str">"*"</span>
+        <span class="kw">FinPour</span>
+        <span class="fn">Ecrire</span>(<span class="var">ligne</span>)
+    <span class="kw">FinPour</span>
+<span class="kw">FinProcédure</span>
+
+<span class="kw">Algorithme</span> <span class="var">Dessin</span>
+<span class="kw">Variables</span>
+    <span class="var">N</span> : <span class="typ">Entier</span>
+<span class="kw">Début</span>
+    <span class="fn">Ecrire</span>(<span class="str">"Nombre de lignes :"</span>)
+    <span class="fn">Lire</span>(<span class="var">N</span>)
+    <span class="fn">Triangle</span>(<span class="var">N</span>)
+<span class="kw">Fin</span></code></pre>
+                </div>
+            </div>
+
+        </section>
+
+        <!-- Footer simple -->
+        <footer class="mt-12 text-center text-slate-400 text-sm pb-8">
+            &copy; 2026 Pr. Marouane Haddad - Algorithmique et Programmation S1.
+        </footer>
+    </main>
+
+    <script>
+        // === GESTION DE LA NAVIGATION ===
+        function showSection(sectionId) {
+            // Cacher toutes les sections
+            document.querySelectorAll('.section-content').forEach(el => {
+                el.classList.add('hidden');
+                el.classList.remove('block');
+            });
+            // Afficher la cible
+            document.getElementById(sectionId).classList.remove('hidden');
+            document.getElementById(sectionId).classList.add('block');
+
+            // Mettre à jour l'état actif du menu
+            document.querySelectorAll('.nav-link').forEach(el => el.classList.remove('active'));
+            document.getElementById('nav-' + sectionId).classList.add('active');
+
+            // Scroll vers le haut doucement
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // === GESTION DES SOLUTIONS TD ===
+        function toggleTD(solId, btn) {
+            const solDiv = document.getElementById(solId);
+            if(solDiv.classList.contains('hidden')) {
+                solDiv.classList.remove('hidden');
+                btn.innerHTML = '<i class="fa-solid fa-eye-slash"></i> Masquer la Solution';
+                btn.classList.replace('bg-slate-800', 'bg-red-500');
+                btn.classList.replace('hover:bg-slate-900', 'hover:bg-red-600');
+            } else {
+                solDiv.classList.add('hidden');
+                btn.innerHTML = '<i class="fa-solid fa-eye"></i> Afficher la Solution';
+                btn.classList.replace('bg-red-500', 'bg-slate-800');
+                btn.classList.replace('hover:bg-red-600', 'hover:bg-slate-900');
+            }
+        }
+
+        // === SIMULATEUR TABLEAU DE TRACE (Chapitre 5) ===
+        let traceState = { step: 0, i: "?", somme: 0 };
+        const traceTbody = document.getElementById('trace-tbody');
+        const traceMessage = document.getElementById('trace-message');
+        
+        // Données d'état pour les 5 étapes simulées (Init + 3 tours de boucle + Sortie)
+        const stepsData = [
+            { desc: "Initialisation : somme <- 0", iVal: "?", sommeVal: 0 },
+            { desc: "Tour 1 : i <- 1, somme <- 0 + 1", iVal: 1, sommeVal: 1 },
+            { desc: "Tour 2 : i <- 2, somme <- 1 + 2", iVal: 2, sommeVal: 3 },
+            { desc: "Tour 3 : i <- 3, somme <- 3 + 3", iVal: 3, sommeVal: 6 },
+            { desc: "i > 3, Sortie de la boucle", iVal: 4, sommeVal: 6 }
+        ];
+
+        function nextTraceStep() {
+            if (traceState.step >= stepsData.length) return;
+            
+            const current = stepsData[traceState.step];
+            
+            // Création de la ligne
+            const tr = document.createElement('tr');
+            tr.className = "border-b border-slate-100 hover:bg-slate-50 transition fade-in";
+            
+            // Si c'est la première étape, on met une balise init
+            let stepBadge = traceState.step === 0 ? "Init" : traceState.step;
+            if(traceState.step === 4) stepBadge = "Fin";
+
+            tr.innerHTML = `
+                <td class="px-4 py-2 font-bold text-slate-500">${stepBadge}</td>
+                <td class="px-4 py-2 font-mono ${traceState.step === 4 ? 'text-red-500' : 'text-brand-600'} font-bold">${current.iVal}</td>
+                <td class="px-4 py-2 font-mono text-brand-600 font-bold">${current.sommeVal}</td>
+                <td class="px-4 py-2 text-slate-600 text-xs">${current.desc}</td>
+            `;
+            
+            traceTbody.appendChild(tr);
+            traceState.step++;
+
+            if (traceState.step === stepsData.length) {
+                traceMessage.classList.remove('hidden');
+            }
+        }
+
+        function resetTrace() {
+            traceState.step = 0;
+            traceTbody.innerHTML = '';
+            traceMessage.classList.add('hidden');
+            
+            // On lance automatiquement la première ligne d'initialisation
+            nextTraceStep();
+        }
+
+        // Initialiser le tableau au chargement
+        window.addEventListener('DOMContentLoaded', () => {
+            resetTrace();
+        });
+    </script>
+</body>
+</html>
