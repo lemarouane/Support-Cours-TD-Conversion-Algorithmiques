@@ -112,26 +112,50 @@
             font-family: 'Fira Code', monospace;
             font-size: 0.9rem;
         }
+
+
+
+        /* ===== RESPONSIVE ===== */
+.math-block { overflow-x: auto; }
+
+@media (max-width: 767px) {
+    aside { border-right: 0; border-bottom: 1px solid #e2e8f0; }
+    #sidebar-nav { display: none; max-height: calc(100vh - 72px); }
+    #sidebar-nav.open { display: flex; }
+}
+
+@media (max-width: 640px) {
+    h1.text-4xl { font-size: 1.6rem; line-height: 2rem; }
+    header.mb-10 { margin-bottom: 1.5rem; }
+    .content-card { padding: 1.1rem; border-radius: .75rem; margin-bottom: 1.25rem; }
+    .content-card > .absolute { font-size: 1.75rem; top: .5rem; right: 1rem; }
+    pre { padding: 1rem; font-size: .8rem; }
+    .math-block { font-size: .8rem; }
+}
     </style>
 </head>
 <body class="flex flex-col md:flex-row min-h-screen">
 
-    <!-- SIDEBAR GAUCHE -->
-    <aside class="w-full md:w-80 bg-white border-r border-slate-200 shadow-sm md:fixed h-screen flex flex-col z-50">
-        <!-- Profil Professeur -->
-        <div class="p-8 border-b border-slate-100 flex flex-col items-center text-center bg-gradient-to-b from-brand-50 to-white">
-            <div class="relative">
-                <img src="https://lh3.googleusercontent.com/pw/AP1GczPEvAG9wQgYBtmNdhNz5Z80VOmZoazIm1ICMWg9uBXkHMzmIdekHNWZmc2yxmHl1nhknfYYfNFCBLVsxqP1b4Uqe0ayEQmgtvVRgGvPCNXvoa2Smic1a40mB6QXLSlGcUiCIl6SXM-VEsnUzHU3NbM=w683-h911-s-no-gm?authuser=0" 
-                     alt="Pr. Marouane Haddad" 
-                     class="w-28 h-28 rounded-full border-4 border-white shadow-lg object-contain">
-                <div class="absolute bottom-1 right-1 bg-green-500 w-4 h-4 rounded-full border-2 border-white"></div>
-            </div>
-            <h2 class="font-bold text-slate-900 text-xl mt-4">Pr. Marouane Haddad</h2>
-            <p class="text-xs text-brand-600 font-semibold tracking-wider mt-1 uppercase bg-brand-100 px-3 py-1 rounded-full"> Algorithmique & Progr. </p>
+<aside class="w-full md:w-80 bg-white border-r border-slate-200 shadow-sm sticky top-0 md:fixed md:left-0 md:h-screen flex flex-col z-50">
+    <!-- Profil Professeur -->
+    <div class="p-3 md:p-8 border-b border-slate-100 flex flex-row md:flex-col items-center gap-3 md:gap-0 md:text-center bg-gradient-to-b from-brand-50 to-white">
+        <div class="relative">
+            <img src="..." alt="Pr. Marouane Haddad"
+                 class="w-11 h-11 md:w-28 md:h-28 rounded-full border-2 md:border-4 border-white shadow-lg object-contain">
+            <div class="hidden md:block absolute bottom-1 right-1 bg-green-500 w-4 h-4 rounded-full border-2 border-white"></div>
         </div>
+        <h2 class="font-bold text-slate-900 text-base md:text-xl md:mt-4">Pr. Marouane Haddad</h2>
+        <p class="hidden md:block text-xs text-brand-600 font-semibold tracking-wider mt-1 uppercase bg-brand-100 px-3 py-1 rounded-full"> Algorithmique & Progr. </p>
 
-        <!-- Menu de Navigation -->
-        <nav class="flex-1 overflow-y-auto py-6 flex flex-col gap-1 px-3">
+        <!-- Hamburger (mobile only) -->
+        <button id="menu-btn" onclick="toggleMenu()" aria-label="Menu" aria-expanded="false"
+                class="md:hidden ml-auto w-10 h-10 rounded-lg border border-slate-200 text-slate-600 bg-white">
+            <i class="fa-solid fa-bars"></i>
+        </button>
+    </div>
+
+    <!-- Menu de Navigation -->
+    <nav id="sidebar-nav" class="flex-1 overflow-y-auto py-6 flex flex-col gap-1 px-3">
             <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider ml-4 mb-2">Cours Magistral</h3>
             
             <a onclick="showSection('sec-bases')" id="nav-sec-bases" class="nav-link active flex items-center gap-3 px-4 py-3 rounded-r-lg text-slate-600 cursor-pointer">
@@ -173,8 +197,7 @@
     </aside>
 
     <!-- MAIN CONTENT -->
-    <main class="flex-1 min-w-0 md:ml-80 p-6 md:p-12 lg:px-16 lg:py-12 w-full">
-        
+<main class="flex-1 min-w-0 md:ml-80 p-4 sm:p-6 md:p-10 lg:px-16 lg:py-12 w-full">        
         <!-- ========================================== -->
         <!-- SECTION 0: BASES NUMERIQUES ET CONVERSIONS -->
         <!-- ========================================== -->
@@ -433,7 +456,7 @@
     <span class="var">somme</span> <span class="op">&lt;-</span> <span class="var">somme</span> <span class="op">+</span> <span class="var">i</span>
 <span class="kw">FinPour</span>
 <span class="fn">Ecrire</span>(<span class="str">"Résultat :"</span>, <span class="var">somme</span>)</code></pre>
-                        <div class="mt-4 flex gap-2">
+                        <div class="mt-4 flex flex-wrap gap-2">
                             <button onclick="nextTraceStep()" class="bg-brand-600 text-white px-4 py-2 rounded shadow hover:bg-brand-700 transition font-medium text-sm">
                                 Étape Suivante <i class="fa-solid fa-forward-step ml-1"></i>
                             </button>
@@ -1309,6 +1332,8 @@
     <script>
         // === GESTION DE LA NAVIGATION ===
         function showSection(sectionId) {
+
+            closeMenu();
             // Cacher toutes les sections
             document.querySelectorAll('.section-content').forEach(el => {
                 el.classList.add('hidden');
@@ -1397,6 +1422,35 @@
         window.addEventListener('DOMContentLoaded', () => {
             resetTrace();
         });
+
+
+
+
+
+
+
+
+
+
+
+
+
+        function closeMenu() {
+    document.getElementById('sidebar-nav').classList.remove('open');
+    const btn = document.getElementById('menu-btn');
+    btn.setAttribute('aria-expanded', 'false');
+    btn.querySelector('i').className = 'fa-solid fa-bars';
+}
+
+function toggleMenu() {
+    const open = document.getElementById('sidebar-nav').classList.toggle('open');
+    const btn = document.getElementById('menu-btn');
+    btn.setAttribute('aria-expanded', open);
+    btn.querySelector('i').className = open ? 'fa-solid fa-xmark' : 'fa-solid fa-bars';
+}
+
+
+
     </script>
 </body>
 </html>
